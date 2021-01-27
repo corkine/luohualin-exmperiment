@@ -1,0 +1,14 @@
+.idea
+.vscode
+pics
+data
+target
+display/results
+display/seeds
+project/target
+project/project/target
+logDist
+genPictures
+output
+*.class
+*.history
