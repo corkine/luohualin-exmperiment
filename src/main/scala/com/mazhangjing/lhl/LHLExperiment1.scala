@@ -54,7 +54,7 @@ object Exp1Config {
 
 object Exp1Data {
   case class Data(isPre:Boolean,
-                  userAnswer:String,realAnswer:String,
+                  userAnswer:String,realAnswer:String,realShortAnswer:String,
                   answerRight:Boolean,
                   costMills:Long,
                   time:LocalDateTime = LocalDateTime.now())
@@ -255,6 +255,7 @@ trait LearnTry extends ScreenAdaptor {
   val info:String =
     """
       |对于刚才的任务是否需要再次练习？
+      |
       |Q 是的，再练习一次
       |P 不需要，进入正式实验
       |""".stripMargin
@@ -349,8 +350,9 @@ trait AnswerCollect extends ScreenAdaptor {
     if (!isMeSkip) {
       val costTime = System.currentTimeMillis() - startTime
       val answerRight = realAnswer.endsWith(answer()) && answer().length == 4
+      val realShortAnswer = realAnswer.substring(realAnswer.length - 4)
       logger.info(s"UserAnswer ${answer()}, realAnswer $realAnswer, isRight?$answerRight")
-      Exp1Data.addData(Exp1Data.Data(isPre, answer(), realAnswer, answerRight, costTime))
+      Exp1Data.addData(Exp1Data.Data(isPre, answer(), realAnswer, realShortAnswer, answerRight, costTime))
     }
   }
 }
