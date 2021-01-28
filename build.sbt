@@ -41,3 +41,14 @@ assemblyMergeStrategy in assembly := {
       val oldStrategy = (assemblyMergeStrategy in assembly).value
       oldStrategy(x)
 }
+
+/*
+enablePlugins(WindowsPlugin)
+// general package information (can be scoped to Windows)
+maintainer := "Corkine Ma <corkine@outlook.com>"
+packageSummary := "LHLExperiment"
+packageDescription := """LHLExperiment v0.0.1"""
+
+// wix build information
+wixProductId := "48c5089b-c8d9-4f7c-ad72-e7ad7963cce2"
+wixProductUpgradeId := "673cc705-76a9-47ac-94a7-ce5c1c8f8873"*/

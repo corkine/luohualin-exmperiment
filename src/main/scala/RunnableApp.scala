@@ -1,4 +1,5 @@
 import com.mazhangjing.utils.{ExpStarter, Logging}
+import net.ceedubs.ficus.Ficus._
 import scalafx.application.JFXApp
 import scalafx.application.JFXApp.PrimaryStage
 import scalafx.beans.property.StringProperty
@@ -47,6 +48,10 @@ object RunnableApp extends JFXApp with Logging {
       log.warn("Use Fake UserID and UserMale...")
     }
 
+    def check(key:String): Boolean = {
+      ExpConfig.CONF.as[Option[Boolean]](key).getOrElse(false)
+    }
+
     scene = new Scene(400,300) {
       root = new VBox {
         padding = Insets(0,0,0,70)
@@ -55,27 +60,27 @@ object RunnableApp extends JFXApp with Logging {
         children = Seq(
           new Button("实验1") {
             onAction = _ => {
-              new ExpStarter{}
-                .runExperiment("LHLExperiment1",fullScreen = !ExpConfig.IS_DEBUG,mainStage)
+              if (check("main.activateExp1")) new ExpStarter {}
+                .runExperiment("LHLExperiment1",fullScreen = !ExpConfig.IS_DEBUG, mainStage)
             }
           },
           new Button("实验2") {
             onAction = _ => {
-              new ExpStarter {}
+              if (check("main.activateExp2")) new ExpStarter {}
                 .runExperiment("LHLExperiment2",fullScreen = !ExpConfig.IS_DEBUG, mainStage)
             }
           },
           new Button("实验3 JMMJ") {
             onAction = _ => {
               Exp3Config._USE_JI_MAO_MAO_JI = true
-              new ExpStarter {}
+              if (check("main.activateExp3_1")) new ExpStarter {}
                 .runExperiment("LHLExperiment3",fullScreen = !ExpConfig.IS_DEBUG, mainStage)
             }
           },
           new Button("实验3 MJJM") {
             onAction = _ => {
               Exp3Config._USE_JI_MAO_MAO_JI = false
-              new ExpStarter {}
+              if (check("main.activateExp3_2")) new ExpStarter {}
                 .runExperiment("LHLExperiment3",fullScreen = !ExpConfig.IS_DEBUG, mainStage)
             }
           }
