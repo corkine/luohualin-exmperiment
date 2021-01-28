@@ -83,8 +83,8 @@ public class SimpleExperimentHelperImpl implements ExperimentHelper {
             "The software is based on the Java FX framework and Java FX is based on the GNU v2 distribution protocol.\n" +
             "The software is based on the PSY4J framework design. PSY4J is the work of Corkine Ma, which allows binary packages and source code to " +
             "be used, but the source code must not be tampered with in any way and closed source.\n" +
-            "Contact: psy4j@mazhangjing.com and Support site: www.mazhangjing.com" +
-            " © Marvin Studio 2018 - 2019";
+            "Contact: psy4j@mazhangjing.com and Support site: mazhangjing.com/psy4j" +
+            " © Marvin Studio 2018 - 2021";
 
     /**
      * 在此处通过对 classpath 下的 invoke.properties 中的 expRunnerClassName 获取，之后通过反射创建 ExpRunner 对象，将其注入到自己的属性中
@@ -331,7 +331,7 @@ public class SimpleExperimentHelperImpl implements ExperimentHelper {
         //设置外观样式
         stage.setWidth(900.0);
         stage.setHeight(600.0);
-        stage.setTitle(String.format("%s - %s - Powered by PSY4J",runner.getTitle(), runner.getVersion()));
+        stage.setTitle(String.format("%s %s - Powered by PSY4J",runner.getTitle(), runner.getVersion()));
         //设置样式表文件
         scene.getStylesheets().add(
                 Objects.requireNonNull(getClass().getClassLoader().getResource("style.css")).toExternalForm());

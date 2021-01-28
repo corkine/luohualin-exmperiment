@@ -4,7 +4,7 @@ import xsbt.Log
 
 name := "lhlExp"
 description := "罗华林的毕业实验"
-version := "0.1"
+version := "1.0"
 fork in run := true
 mainClass in (Compile, run) := Some("RunnableApp")
 scalaVersion := "2.13.1"
@@ -24,6 +24,10 @@ libraryDependencies += "ch.qos.logback" % "logback-classic" % "1.2.3"
 libraryDependencies += "com.typesafe.play" %% "play-json" % "2.8.1"
 // https://mvnrepository.com/artifact/commons-io/commons-io
 libraryDependencies += "commons-io" % "commons-io" % "2.8.0"
+// https://mvnrepository.com/artifact/com.typesafe/config
+libraryDependencies += "com.typesafe" % "config" % "1.4.0"
+libraryDependencies += "com.iheart" %% "ficus" % "1.5.0"
+
 
 mainClass in assembly := Some("RunnableApp")
 assemblyMergeStrategy in assembly := {

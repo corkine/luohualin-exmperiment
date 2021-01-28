@@ -9,36 +9,39 @@ import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import scala.collection.mutable.ArrayBuffer
 import Exp2Config._
-import ExpConfig.SKIP_NOW
+import ExpConfig._SKIP_NOW
+import com.typesafe.config.Config
 import javafx.event.Event
 import scalafx.beans.property.StringProperty
 import scalafx.scene.input.KeyCode
 import scalafx.scene.layout.StackPane
+import net.ceedubs.ficus.Ficus._
 
 import scala.util.Random
 
 object Exp2Config {
   import ExpConfig._
-  val INTRO_SIZE = 32
-  lazy val BIG_INTRO_SIZE: Int = INTRO_SIZE + 10
-  val TARGET_SIZE = 40
-  val CROSS_SIZE = 32
-  val NUMBER_SIZE = 52
-  val EXP2_LEARN_BIG_INTRO_TIME = 500
-  val EXP2_LEARN_TARGETS = "124abc"
-  val EXP2_LEARN_ANSWERS = "sjjsjj"
-  val EXP2_BLOCK1 = "1 2 3 4 5 6 7 8 9 10"
-  val EXP2_BLOCK1_ANSWER = "s j s j s j s j s j"
-  val EXP2_BLOCK2 = "1 2 3 4 5 6 7 8 9 10 a e i o u b c d f g"
-  val EXP2_BLOCK2_ANSWER = "s j s j s j s j s j s s s s s j j j j j"
-  val EXP2_BLOCK3 = "a e i o u b c d f g"
-  val EXP2_BLOCK3_ANSWER = "s s s s s j j j j j"
-  val CROSS_TIME = 500
-  val TARGET_TIME = 2000
-  val FEEDBACK_TIME = 4000
-  val GOOD_PERCENT = 0.8
-  val GOOD_PERCENT_MIN_TRY = 6
-  var PERCENT_NOW = 0.0
+  private val CONF2: Config = CONF.getConfig("exp2")
+  val INTRO_SIZE: Int = CONF2.as[Int]("introSize")
+  val BIG_INTRO_SIZE: Int = CONF2.as[Int]("bigIntroSize")
+  val TARGET_SIZE: Int = CONF2.as[Int]("targetSize")
+  val CROSS_SIZE: Int = CONF2.as[Int]("crossSize")
+  val EXP2_BIG_INTRO_TIME: Int = CONF2.as[Int]("bigIntroTime")
+  val EXP2_LEARN_TARGETS: String = CONF2.as[Option[String]]("learnTargets").getOrElse("124abc")
+  val EXP2_LEARN_ANSWERS: String = CONF2.as[Option[String]]("learnAnswers").getOrElse("sjjsjj")
+  val EXP2_BLOCK1: String = CONF2.as[Option[String]]("block1").getOrElse("1 2 3 4 5 6 7 8 9 10")
+  val EXP2_BLOCK1_ANSWER: String = CONF2.as[Option[String]]("block1Answer").getOrElse("s j s j s j s j s j")
+  val EXP2_BLOCK2: String = CONF2.as[Option[String]]("block2").getOrElse("1 2 3 4 5 6 7 8 9 10 a e i o u b c d f g")
+  val EXP2_BLOCK2_ANSWER: String = CONF2.as[Option[String]]("block2Answer").getOrElse("s j s j s j s j s j s s s s s j j j j j")
+  val EXP2_BLOCK3: String = CONF2.as[Option[String]]("block3").getOrElse("a e i o u b c d f g")
+  val EXP2_BLOCK3_ANSWER: String = CONF2.as[Option[String]]("block3Answer").getOrElse("s s s s s j j j j j")
+  val CROSS_TIME: Int = CONF2.as[Int]("crossTime")
+  val TARGET_TIME: Int = CONF2.as[Int]("targetTime")
+  val FEEDBACK_TIME: Int = CONF2.as[Int]("feedBackTime")
+  val GOOD_PERCENT: Double = CONF2.as[Double]("goodPercent")
+  val GOOD_PERCENT_MIN_TRY: Int = CONF2.as[Int]("goodPercentMinTry")
+  val INTRO_CONTENT: String = CONF2.as[String]("introContent")
+  var _PERCENT_NOW = 0.0
 }
 
 object Exp2Data {
@@ -60,15 +63,13 @@ class Exp2Trial extends Trial {
     //指导语界面
     screens.add(new Intro {
       override val introSize: Int = INTRO_SIZE
-      override val info: String =
-        """您好，欢迎来参加我的实验！接下来屏幕上会出现数字和字母。对于数字，奇数请您用s键按键反应，偶数请用j键来反应。对于字母，元音请按s键反应，辅音请按j键反应。请您把双手放在键盘上，刺激出现后请快速准确地做出反应。下面请按q键进入练习环节帮助你熟悉实验流程。
-        """.stripMargin
+      override val info: String = INTRO_CONTENT
     }.initScreen())
     //练习部分提示界面
     screens.add(new Intro {
       override val introSize: Int = BIG_INTRO_SIZE
       override val info: String = "练习部分"
-      override val timeSkip: Int = EXP2_LEARN_BIG_INTRO_TIME
+      override val timeSkip: Int = EXP2_BIG_INTRO_TIME
       override val textAlign: TextAlignment = TextAlignment.Center
     }.initScreen())
     (1 to 20).foreach { _ =>
@@ -103,7 +104,7 @@ class Exp2Trial extends Trial {
     screens.add(new Intro {
       override val introSize: Int = BIG_INTRO_SIZE
       override val info: String = "实验部分"
-      override val timeSkip: Int = EXP2_LEARN_BIG_INTRO_TIME
+      override val timeSkip: Int = EXP2_BIG_INTRO_TIME
       override val textAlign: TextAlignment = TextAlignment.Center
     }.initScreen())
     //BLOCK1 & 2 & 3
@@ -167,12 +168,12 @@ class LHLExperiment2 extends Experiment with Logging {
 
 trait FeedbackScreen extends ScreenAdaptor {
   override def callWhenShowScreen(): Unit = {
-    if (SKIP_NOW) goNextScreenSafe
+    if (_SKIP_NOW) goNextScreenSafe
     else {
-      if (goodToGo()) SKIP_NOW = true
-      info.set(s"当前正确率 ${String.format("%.2f",PERCENT_NOW * 100)}%, " +
+      if (goodToGo()) _SKIP_NOW = true
+      info.set(s"当前正确率 ${String.format("%.2f",_PERCENT_NOW * 100)}%, " +
         s"需要达到的正确率 ${String.format("%.2f",GOOD_PERCENT * 100)}%, " +
-        s"按 Q ${if (PERCENT_NOW >= GOOD_PERCENT) "开始正式试验" else "重试"}")
+        s"按 Q ${if (_PERCENT_NOW >= GOOD_PERCENT) "开始正式试验" else "重试"}")
     }
   }
   val goodPercent: Double = Exp2Config.GOOD_PERCENT
@@ -187,7 +188,7 @@ trait FeedbackScreen extends ScreenAdaptor {
           text <== info
           textAlignment = TextAlignment.Center
           wrappingWidth <== sp.width / 2
-          font = Font.font(TARGET_SIZE)
+          font = Font.font(INTRO_SIZE)
         }
       )
     }
@@ -199,7 +200,7 @@ trait FeedbackScreen extends ScreenAdaptor {
     val all = now.length
     val rightPercent = now.count(_.answerRight) * 1.0 / all
     logger.info(s"Right Percent $rightPercent now... Target Percent is $goodPercent")
-    PERCENT_NOW = rightPercent
+    _PERCENT_NOW = rightPercent
     if (rightPercent >= goodPercent && all >= minTry) true else false
   }
   override def eventHandler(event: Event, experiment: Experiment, scene: JScene): Unit = {
@@ -216,7 +217,7 @@ trait TargetShowAndCheckScreen extends ScreenAdaptor {
   val blockInfo: String
   private var startTime: Long = 0L
   override def callWhenShowScreen(): Unit = {
-    if (SKIP_NOW) goNextScreenSafe
+    if (_SKIP_NOW) goNextScreenSafe
     else startTime = System.currentTimeMillis()
   }
   override def initScreen(): Screen = {
@@ -234,7 +235,7 @@ trait TargetShowAndCheckScreen extends ScreenAdaptor {
   }
 
   override def callWhenLeavingScreen(): Unit = {
-    if (!SKIP_NOW) {
+    if (!_SKIP_NOW) {
       val timeCost = System.currentTimeMillis() - startTime
       val userChoose = getCode
       if (getCode.isEmpty) logger.warn("User don't have answer!!!")
@@ -251,7 +252,7 @@ trait TargetShowAndCheckScreen extends ScreenAdaptor {
   private var getCode: String = ""
 
   override def eventHandler(event: Event, experiment: Experiment, scene: JScene): Unit = {
-    if (!SKIP_NOW) {
+    if (!_SKIP_NOW) {
       ifKeyIn(event) { code =>
         getCode = code.getName
         goNextScreenSafe

@@ -17,7 +17,7 @@ trait ExpStarter {
         setOpenedEventSet(set)
         setExperimentClassName(experimentClassName)
         setTitle("Experiment")
-        setVersion("0.0.1")
+        setVersion("[MVST]")
         setFullScreen(fullScreen)
       }
     })

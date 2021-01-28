@@ -44,9 +44,7 @@ object RunnableApp extends JFXApp with Logging {
       ExpConfig.USER_MALE = if (USER_GENDER().contains("男")) true else false
       log.info(s"Get UserID ${ExpConfig.USER_ID}, UserIsMale? ${ExpConfig.USER_MALE}")
     } else {
-      ExpConfig.USER_ID = "23333"
-      ExpConfig.USER_MALE = true
-      log.warn("Fake UserID and UserMale...")
+      log.warn("Use Fake UserID and UserMale...")
     }
 
     scene = new Scene(400,300) {
@@ -69,14 +67,14 @@ object RunnableApp extends JFXApp with Logging {
           },
           new Button("实验3 JMMJ") {
             onAction = _ => {
-              Exp3Config.USE_JI_MAO_MAO_JI = true
+              Exp3Config._USE_JI_MAO_MAO_JI = true
               new ExpStarter {}
                 .runExperiment("LHLExperiment3",fullScreen = !ExpConfig.IS_DEBUG, mainStage)
             }
           },
           new Button("实验3 MJJM") {
             onAction = _ => {
-              Exp3Config.USE_JI_MAO_MAO_JI = false
+              Exp3Config._USE_JI_MAO_MAO_JI = false
               new ExpStarter {}
                 .runExperiment("LHLExperiment3",fullScreen = !ExpConfig.IS_DEBUG, mainStage)
             }

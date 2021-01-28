@@ -1,6 +1,7 @@
 import Exp1Config._
 import com.mazhangjing.lab.{Experiment, Screen, ScreenAdaptor, Trial}
 import com.mazhangjing.utils.Logging
+import com.typesafe.config.{Config, ConfigFactory}
 import javafx.event.Event
 import javafx.scene.input.KeyCode
 import javafx.scene.{Scene => JScene}
@@ -12,41 +13,39 @@ import scalafx.scene.layout.{StackPane, VBox}
 import scalafx.scene.paint.Color
 import scalafx.scene.text.{Font, Text, TextAlignment}
 
-import java.io.FileWriter
+import java.io.{File, FileWriter}
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
+import java.util
+import scala.collection.convert.ImplicitConversions.`iterator asScala`
 import scala.collection.mutable.ArrayBuffer
 
 object ExpConfig {
-  val IS_DEBUG = false
-  var USER_ID: String = _
-  var USER_MALE: Boolean = _
-  lazy val SKIP_USER_INFO: Boolean = IS_DEBUG
-  var SKIP_NOW = false
+  var CONF: Config = ConfigFactory.parseFile(new File("config.conf")).resolve()
+  var IS_DEBUG: Boolean = CONF.getBoolean("main.isDebug")
+  var USER_ID: String = CONF.getString("main.fakeUserId")
+  var USER_MALE: Boolean = CONF.getBoolean("main.fakeUserMale")
+  var SKIP_USER_INFO: Boolean = CONF.getBoolean("main.skipUserInfo")
+  var _SKIP_NOW = false
 }
 
 object Exp1Config {
   import ExpConfig._
-  val INTRO_SIZE = 32
-  lazy val BIG_INTRO_SIZE: Int = INTRO_SIZE + 10
-  val CROSS_SIZE = 32
-  val NUMBER_SIZE = 52
-  val FEEDBACK_SIZE = 32
-  val FEEDBACK_LEFT_PADDING = 250
-  val EXP1_LEARN_BIG_INTRO_TIME = 500
-  val EXP1_LEARN_NUMBER = "42364325"
-  val EXP1_NUMBERS = Seq(
-    "4638376136",
-    "94362172263",
-    "25735276275",
-    "74352904325",
-    "3721290482",
-    "03237449324",
-    "243094582375",
-    "307294821639",
-    "149532250")
-  val CROSS_TIME = 250
-  val NUMBER_TIME = 1000
+  var INTRO_SIZE: Int = CONF.getInt("exp1.introSize")
+  var BIG_INTRO_SIZE: Int = CONF.getInt("exp1.bigIntroSize")
+  var CROSS_SIZE: Int = CONF.getInt("exp1.crossSize")
+  var NUMBER_SIZE: Int = CONF.getInt("exp1.numberSize")
+  var FEEDBACK_SIZE: Int = CONF.getInt("exp1.feedBackSize")
+  var FEEDBACK_LEFT_PADDING: Int = CONF.getInt("exp1.feedBackLeftPadding")
+  var EXP1_BIG_INTRO_TIME: Int = CONF.getInt("exp1.bigIntroTime")
+  var EXP1_LEARN_NUMBER: String = CONF.getString("exp1.learnNumber") //42364325
+  var EXP1_NUMBERS: util.List[String] = CONF.getStringList("exp1.numbers")
+  /*Seq("4638376136","94362172263","25735276275","74352904325","3721290482",
+    "03237449324","243094582375","307294821639","149532250")*/
+  var CROSS_TIME: Int = CONF.getInt("exp1.crossTime")
+  var NUMBER_TIME: Int = CONF.getInt("exp1.numberTime")
+
+  var INTRO_CONTENT:String = CONF.getString("exp1.introContent")
 }
 
 object Exp1Data {
@@ -67,15 +66,13 @@ class Exp1Trial extends Trial {
     //指导语界面
     screens.add(new Intro {
       override val introSize: Int = INTRO_SIZE
-      override val info: String =
-        """屏幕上将会按顺序呈现一串数字，要求您记住数字串中呈现的最后4个数字，并在数字呈现完毕后在屏幕答题框内输入你记住的数字。 如果您已经理解了实验要求，请按 q 键开始练习；如果还没有理解，请咨询主试为您解释。
-          |""".stripMargin
+      override val info: String = INTRO_CONTENT
     }.initScreen())
     //练习部分提示界面
     screens.add(new Intro {
       override val introSize: Int = BIG_INTRO_SIZE
       override val info: String = "练习部分"
-      override val timeSkip: Int = EXP1_LEARN_BIG_INTRO_TIME
+      override val timeSkip: Int = EXP1_BIG_INTRO_TIME
       override val textAlign: TextAlignment = TextAlignment.Center
     }.initScreen())
     (1 to 10).foreach { _ =>
@@ -111,10 +108,10 @@ class Exp1Trial extends Trial {
     screens.add(new Intro {
       override val introSize: Int = BIG_INTRO_SIZE
       override val info: String = "实验部分"
-      override val timeSkip: Int = EXP1_LEARN_BIG_INTRO_TIME
+      override val timeSkip: Int = EXP1_BIG_INTRO_TIME
       override val textAlign: TextAlignment = TextAlignment.Center
     }.initScreen())
-    EXP1_NUMBERS.foreach { fullNumber =>
+    EXP1_NUMBERS.iterator().foreach { fullNumber =>
       //实验部分数字呈现
       fullNumber.toCharArray.zipWithIndex.foreach { case (c,n) =>
         val number = c.toString
@@ -176,7 +173,7 @@ class LHLExperiment1 extends Experiment with Logging {
 //单纯文字指导语 Screen
 trait Intro extends ScreenAdaptor {
   override def callWhenShowScreen(): Unit = {
-    if (ExpConfig.SKIP_NOW) goNextScreenSafe
+    if (ExpConfig._SKIP_NOW) goNextScreenSafe
   }
   val introSize:Int
   val info:String
@@ -205,7 +202,7 @@ trait Intro extends ScreenAdaptor {
 
 trait Normal extends ScreenAdaptor {
   override def callWhenShowScreen(): Unit = {
-    ExpConfig.SKIP_NOW = false
+    ExpConfig._SKIP_NOW = false
   }
   override def initScreen(): Screen = {
     layout = new StackPane { sp =>
@@ -225,7 +222,7 @@ trait Normal extends ScreenAdaptor {
 //十字注视点 Screen
 trait Cross extends ScreenAdaptor {
   override def callWhenShowScreen(): Unit = {
-    if (ExpConfig.SKIP_NOW) goNextScreenSafe
+    if (ExpConfig._SKIP_NOW) goNextScreenSafe
   }
   val crossFontSize: Int
   val crossShowMs: Int
@@ -248,7 +245,7 @@ trait Cross extends ScreenAdaptor {
 //练习重试 Screen
 trait LearnTry extends ScreenAdaptor {
   override def callWhenShowScreen(): Unit = {
-    if (ExpConfig.SKIP_NOW) goNextScreenSafe
+    if (ExpConfig._SKIP_NOW) goNextScreenSafe
   }
   val introSize:Int = INTRO_SIZE
   val info:String =
@@ -278,7 +275,7 @@ trait LearnTry extends ScreenAdaptor {
       goNextScreenSafe
     }
     ifKeyButton(KeyCode.P, event) {
-      ExpConfig.SKIP_NOW = true
+      ExpConfig._SKIP_NOW = true
       goNextScreenSafe
     }
   }
@@ -289,7 +286,7 @@ trait AnswerCollect extends ScreenAdaptor {
   private var isMeSkip = false
   private var startTime: Long = _
   override def callWhenShowScreen(): Unit = {
-    if (ExpConfig.SKIP_NOW) {
+    if (ExpConfig._SKIP_NOW) {
       isMeSkip = true; goNextScreenSafe
     } else startTime = System.currentTimeMillis()
   }
