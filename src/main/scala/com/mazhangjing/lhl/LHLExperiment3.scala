@@ -133,7 +133,8 @@ class Exp3Trial extends Trial {
         val k_c = kc.trim.split("-"); (k_c(0), k_c(1))
       }
       val answers = block_answer.split(" ").map(_.trim)
-      val all = Random.shuffle((targets zip answers).toBuffer)
+      //实验 3 正式试验的每个 trial 出现 2 次
+      val all = Random.shuffle((targets zip answers).toBuffer ++ (targets zip answers).toBuffer)
       all.zipWithIndex.foreach { case (((c, t), r), i) =>
         val show = t
         val showColor = color(c)
