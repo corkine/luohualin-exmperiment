@@ -4,9 +4,9 @@ import xsbt.Log
 
 name := "lhlExp"
 description := "罗华林的毕业实验"
-version := "1.0"
+version := "1.1"
 fork in run := true
-mainClass in (Compile, run) := Some("RunnableApp")
+mainClass in (Compile, run) := Some("com.mazhangjing.lhl.RunnableApp")
 scalaVersion := "2.13.1"
 javacOptions := Seq("-target", "1.8")
 
@@ -29,7 +29,7 @@ libraryDependencies += "com.typesafe" % "config" % "1.4.0"
 libraryDependencies += "com.iheart" %% "ficus" % "1.5.0"
 
 
-mainClass in assembly := Some("RunnableApp")
+mainClass in assembly := Some("com.mazhangjing.lhl.RunnableApp")
 assemblyMergeStrategy in assembly := {
     case manifest if manifest.contains("MANIFEST.MF") =>
       MergeStrategy.discard
@@ -42,6 +42,11 @@ assemblyMergeStrategy in assembly := {
       oldStrategy(x)
 }
 
+//Use assembly jar for Universal executable
+//For Windows Package, Use launch4j Wrapper, launch4j.jar -> load config -> wrap it.
+//For MacOS Package, Use jar2app: jar2app lhlExp-assembly-1.0.jar -n "Psy4J App" -r /Library/Java/JavaVirtualMachines/jdk1.8.0_261.jdk main.app
+//Note: The work dir is User's home, data and config should set there.
+
 /*
 enablePlugins(WindowsPlugin)
 // general package information (can be scoped to Windows)
@@ -52,3 +57,24 @@ packageDescription := """LHLExperiment v0.0.1"""
 // wix build information
 wixProductId := "48c5089b-c8d9-4f7c-ad72-e7ad7963cce2"
 wixProductUpgradeId := "673cc705-76a9-47ac-94a7-ce5c1c8f8873"*/
+
+//For Mac Package, Use
+/*
+enablePlugins(JDKPackagerPlugin)
+lazy val iconGlob = sys.props("os.name").toLowerCase match {
+  case os if os.contains("mac") => "*.icns"
+  case os if os.contains("win") => "*.ico"
+  case _ => "*.png"
+}
+jdkPackagerJVMArgs := Seq("-Xmx1g")
+maintainer := "CorkineMa"
+packageSummary := "LHLExperiment Powered by Psy4J"
+packageDescription := "LHLExperiment Powered by Psy4J"
+jdkPackagerProperties := Map("app.name" -> name.value, "app.version" -> version.value)
+jdkPackagerAppArgs := Seq(maintainer.value, packageSummary.value, packageDescription.value)
+jdkPackagerType := "image"
+(antPackagerTasks in JDKPackager) := (antPackagerTasks in JDKPackager).value orElse {
+  for {
+    f <- Some(file("/Library/Java/JavaVirtualMachines/jdk1.8.0_261.jdk/Contents/Home/lib/ant-javafx.jar")) if f.exists()
+  } yield f
+}*/

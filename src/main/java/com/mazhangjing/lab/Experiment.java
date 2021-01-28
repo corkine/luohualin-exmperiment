@@ -26,7 +26,7 @@ import java.util.Iterator;
  * eventHandler 进行处理。这样的话，不论是用户响应界面还是超时，均会绘制下一个Screen</p>
  *
  * @author <a href='http://www.mazhangjing.com'>Corkine Ma</a>
- * @author Marvin Studio @ Central China Normal University
+ * @author Marvin Studio @ Central China com.mazhangjing.lhl.Normal University
  * @version 1.1
  * */
 public abstract class Experiment {

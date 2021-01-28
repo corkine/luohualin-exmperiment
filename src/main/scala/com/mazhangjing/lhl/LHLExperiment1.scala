@@ -1,5 +1,7 @@
-import Exp1Config._
+package com.mazhangjing.lhl
+
 import com.mazhangjing.lab.{Experiment, Screen, ScreenAdaptor, Trial}
+import com.mazhangjing.lhl.Exp1Config.{INTRO_SIZE, _}
 import com.mazhangjing.utils.Logging
 import com.typesafe.config.{Config, ConfigFactory}
 import javafx.event.Event
@@ -21,7 +23,9 @@ import scala.collection.convert.ImplicitConversions.`iterator asScala`
 import scala.collection.mutable.ArrayBuffer
 
 object ExpConfig {
+  println("DIR IS " + System.getProperty("user.dir"))
   var CONF: Config = ConfigFactory.parseFile(new File("config.conf")).resolve()
+  //var CONF: Config = ConfigFactory.load().resolve()
   var IS_DEBUG: Boolean = CONF.getBoolean("main.isDebug")
   var USER_ID: String = CONF.getString("main.fakeUserId")
   var USER_MALE: Boolean = CONF.getBoolean("main.fakeUserMale")
@@ -84,7 +88,7 @@ class Exp1Trial extends Trial {
         screens.add(new Cross {
           override val crossShowMs: Int = CROSS_TIME
           override val crossFontSize: Int = CROSS_SIZE
-          information = s"Cross Screen[LEARN]"
+          information = s"com.mazhangjing.lhl.Cross Screen[LEARN]"
         }.initScreen())
         screens.add(new Intro {
           override val introSize: Int = NUMBER_SIZE
@@ -119,7 +123,7 @@ class Exp1Trial extends Trial {
         screens.add(new Cross {
           override val crossShowMs: Int = CROSS_TIME
           override val crossFontSize: Int = CROSS_SIZE
-          information = s"Cross Screen"
+          information = s"com.mazhangjing.lhl.Cross Screen"
         }.initScreen())
         screens.add(new Intro {
           override val introSize: Int = NUMBER_SIZE

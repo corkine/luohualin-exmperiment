@@ -1,22 +1,23 @@
+package com.mazhangjing.lhl
+
 import com.mazhangjing.lab.{Experiment, Screen, ScreenAdaptor, Trial}
+import com.mazhangjing.lhl.Exp2Config.{TARGET_SIZE, TARGET_TIME, _}
+import com.mazhangjing.lhl.ExpConfig._SKIP_NOW
 import com.mazhangjing.utils.Logging
-import play.api.libs.json.{Json, Writes}
-import scalafx.scene.text.{Font, Text, TextAlignment}
+import com.typesafe.config.Config
+import javafx.event.Event
 import javafx.scene.{Scene => JScene}
+import net.ceedubs.ficus.Ficus._
+import play.api.libs.json.{Json, Writes}
+import scalafx.beans.property.StringProperty
+import scalafx.scene.input.KeyCode
+import scalafx.scene.layout.StackPane
+import scalafx.scene.text.{Font, Text, TextAlignment}
 
 import java.io.FileWriter
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import scala.collection.mutable.ArrayBuffer
-import Exp2Config._
-import ExpConfig._SKIP_NOW
-import com.typesafe.config.Config
-import javafx.event.Event
-import scalafx.beans.property.StringProperty
-import scalafx.scene.input.KeyCode
-import scalafx.scene.layout.StackPane
-import net.ceedubs.ficus.Ficus._
-
 import scala.util.Random
 
 object Exp2Config {
@@ -83,7 +84,7 @@ class Exp2Trial extends Trial {
         screens.add(new Cross {
           override val crossShowMs: Int = CROSS_TIME
           override val crossFontSize: Int = CROSS_SIZE
-          information = s"Cross Screen[LEARN]"
+          information = s"com.mazhangjing.lhl.Cross Screen[LEARN]"
         }.initScreen())
         screens.add(new TargetShowAndCheckScreen {
           override val blockInfo: String = "PRE"
@@ -121,7 +122,7 @@ class Exp2Trial extends Trial {
         screens.add(new Cross {
           override val crossShowMs: Int = CROSS_TIME
           override val crossFontSize: Int = CROSS_SIZE
-          information = s"Cross Screen"
+          information = s"com.mazhangjing.lhl.Cross Screen"
         }.initScreen())
         screens.add(new TargetShowAndCheckScreen {
           override val blockInfo: String = block_info

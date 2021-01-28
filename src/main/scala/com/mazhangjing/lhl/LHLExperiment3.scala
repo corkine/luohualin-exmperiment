@@ -1,22 +1,23 @@
+package com.mazhangjing.lhl
+
 import com.mazhangjing.lab.{Experiment, Screen, ScreenAdaptor, Trial}
+import com.mazhangjing.lhl.Exp3Config.{GOOD_FOR_JUST_MIN_TRY, GOOD_PERCENT, GOOD_PERCENT_MIN_TRY, INTRO_SIZE, _PERCENT_NOW, _}
+import com.mazhangjing.lhl.ExpConfig._SKIP_NOW
 import com.mazhangjing.utils.Logging
-import play.api.libs.json.{Json, Writes}
-import scalafx.scene.text.{Font, Text, TextAlignment}
+import javafx.event.Event
+import javafx.scene.paint.Color
 import javafx.scene.{Scene => JScene}
+import net.ceedubs.ficus.Ficus._
+import play.api.libs.json.{Json, Writes}
+import scalafx.beans.property.StringProperty
+import scalafx.scene.input.KeyCode
+import scalafx.scene.layout.StackPane
+import scalafx.scene.text.{Font, Text, TextAlignment}
 
 import java.io.FileWriter
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import scala.collection.mutable.ArrayBuffer
-import Exp3Config._
-import ExpConfig._SKIP_NOW
-import javafx.event.Event
-import javafx.scene.paint.Color
-import scalafx.beans.property.StringProperty
-import scalafx.scene.input.KeyCode
-import scalafx.scene.layout.StackPane
-import net.ceedubs.ficus.Ficus._
-
 import scala.util.Random
 
 object Exp3Config {
@@ -40,7 +41,7 @@ object Exp3Config {
   val GOOD_PERCENT_MIN_TRY: Int = CONF3.as[Int]("goodPercentMinTry")
   val GOOD_FOR_JUST_MIN_TRY: Boolean = CONF3.as[Boolean]("goodForJustMinTry")
   val INTRO_CONTENT: String = CONF3.as[String]("introContent")
-  def color: String => Color = (s:String) => s.toUpperCase match {
+  def color: String => Color = (s:String ) => s.toUpperCase match {
     case "R" => Color.RED
     case "Y" => Color.YELLOW
     case "B" => Color.BLUE
@@ -93,7 +94,7 @@ class Exp3Trial extends Trial {
         screens.add(new Cross {
           override val crossShowMs: Int = CROSS_TIME
           override val crossFontSize: Int = CROSS_SIZE
-          information = s"Cross Screen[LEARN]"
+          information = s"com.mazhangjing.lhl.Cross Screen[LEARN]"
         }.initScreen())
         screens.add(new StoopScreen {
           override val blockInfo: String = "PRE"
@@ -141,7 +142,7 @@ class Exp3Trial extends Trial {
         screens.add(new Cross {
           override val crossShowMs: Int = CROSS_TIME
           override val crossFontSize: Int = CROSS_SIZE
-          information = s"Cross Screen"
+          information = s"com.mazhangjing.lhl.Cross Screen"
         }.initScreen())
         screens.add(new StoopScreen {
           override val blockInfo: String = block_info

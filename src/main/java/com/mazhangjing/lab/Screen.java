@@ -18,7 +18,7 @@ import org.slf4j.LoggerFactory;
  * 因为这个类使用“交给子类”设计模式、“观察者”设计模式，因此能够最大限度的让程序保持弹性。</p>
  *
  * @author <a href='http://www.mazhangjing.com'>Corkine Ma</a>
- * @author Marvin Studio @ Central China Normal University
+ * @author Marvin Studio @ Central China com.mazhangjing.lhl.Normal University
  * @version 1.1
  * */
 public abstract class Screen {

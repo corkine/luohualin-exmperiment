@@ -20,7 +20,7 @@ import java.util.List;
  * <p>我们提供了获取和保存用户数据的方法 getSetUserData() 但是你一般不需要使用它。此类不和GUI直接交互，其仅和 Experiment 耦合，一般情况下，你只需要为 Experiment 提供实现好 Screen 的 Trial 对象即可。</p>
  *
  * @author <a href='http://www.mazhangjing.com'>Corkine Ma</a>
- * @author Marvin Studio @ Central China Normal University
+ * @author Marvin Studio @ Central China com.mazhangjing.lhl.Normal University
  * @version 1.1
  * */
 public abstract class Trial {

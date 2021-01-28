@@ -22,10 +22,10 @@ import scala.util.Random
   * 按键等预定义事件，可以在被调用之前、之后进行快速的设置
   * （发生在主线程，因此 beforeShowThen 和 afterShowThen 要尽可能轻量，不要在此创建对象）
   *
-  * @usecase  ScreenBuilder 可以用在 Trial 中，警告：在 Trial 中不能依靠 Trial 的 getExperiment 等函数设置入参，因为调用 build 的时候
+  *   ScreenBuilder 可以用在 Trial 中，警告：在 Trial 中不能依靠 Trial 的 getExperiment 等函数设置入参，因为调用 build 的时候
   *           此函数的当前值会被获取，且入参会被作为闭包，固定为空，这导致了严重的错误。
-  * @usecase  ScreenBuilder 可以用在 Experiment 中，这时候，可以任意使用外部闭包，比如使用 this 指代 Experiment 对象
-  * @usecase  new ScreenBuilder()
+  *   ScreenBuilder 可以用在 Experiment 中，这时候，可以任意使用外部闭包，比如使用 this 指代 Experiment 对象
+  *   new ScreenBuilder()
   *             .named("信息收集")
   *             .showIn(SET.INFO_SET_MS.getValue())
   *             .setScene(() -> {
@@ -81,7 +81,7 @@ class ScreenBuilder extends Builder[Screen] {
 
   /**
     * Screen 展示的内容，可以为静态或者动态
-    * @usecase 需要注意，如果展示动态内容，需要调用 Experiment 对象，在 Experiment 中使用 this
+    *  需要注意，如果展示动态内容，需要调用 Experiment 对象，在 Experiment 中使用 this
     *          注意，在 Trial 实例中，不能使用像是 getExperiment 获取 Experiment 实例，因为此举动会形成闭包
     *          setScene 会在 build 调用时调用此处内容进行设置，此时，闭包中的入参可能为空。
     * @param layout JavaFx 的 Scene 内容接口对象，比如 HBox BorderPane 实例等
@@ -93,7 +93,7 @@ class ScreenBuilder extends Builder[Screen] {
 
   /**
     * Screen 展示的内容，可以为静态或者动态（JavaAPI，方便 Java 8 的 Lambda 函数作为入参）
-    * @usecase 需要注意，如果展示动态内容，需要调用 Experiment 对象，在 Experiment 中使用 this
+    *  需要注意，如果展示动态内容，需要调用 Experiment 对象，在 Experiment 中使用 this
     *          注意，在 Trial 实例中，不能使用像是 getExperiment 获取 Experiment 实例，因为此举动会形成闭包
     *          setScene 会在 build 调用时调用此处内容进行设置，此时，闭包中的入参可能为空。
     * @param opLayout JavaFx 的 Scene 内容对象接口，比如 HBox BorderPane 实例等
@@ -141,7 +141,7 @@ class ScreenBuilder extends Builder[Screen] {
 
   /**
     * 调用此方法以返回构建器构造的 Screen 对象，自动调用其 initScreen 方法
-    * @usecase 需要注意，如果展示动态内容，需要调用 Experiment 对象，在 Experiment 中使用 this
+    * 需要注意，如果展示动态内容，需要调用 Experiment 对象，在 Experiment 中使用 this
     *          注意，在 Trial 实例中，不能使用像是 getExperiment 获取 Experiment 实例，因为此举动会形成闭包
     *          在 build 调用时调用 setScene 进行设置，此时，闭包中的入参可能为空。
     * @throws IllegalArgumentException 必须调用 showIn 和 setScene 方法设置时间和样式，否则抛出此异常
