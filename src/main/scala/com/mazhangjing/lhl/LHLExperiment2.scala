@@ -84,7 +84,7 @@ class Exp2Trial extends Trial {
         screens.add(new Cross {
           override val crossShowMs: Int = CROSS_TIME
           override val crossFontSize: Int = CROSS_SIZE
-          information = s"com.mazhangjing.lhl.Cross Screen[LEARN]"
+          information = s"Cross Screen[LEARN]"
         }.initScreen())
         screens.add(new TargetShowAndCheckScreen {
           override val blockInfo: String = "PRE"
