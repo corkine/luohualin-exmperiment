@@ -78,3 +78,15 @@ jdkPackagerType := "image"
     f <- Some(file("/Library/Java/JavaVirtualMachines/jdk1.8.0_261.jdk/Contents/Home/lib/ant-javafx.jar")) if f.exists()
   } yield f
 }*/
+
+lazy val winpkg = taskKey[Unit]("jar 打包 exe")
+winpkg := {
+  //确保 launchPath 包含 launch4j 安装程序
+  //确保 target/scala-2.13 生成的 jar 文件名称和 package.xml 文件内对应，确保 package.xml 中 output 文件夹存在且具有 JRE
+  val launchPath = "C:\\Program Files (x86)\\Launch4j"
+  val pkg_config = "C:\\Users\\Corkine\\Desktop\\lhlExp\\target\\scala-2.13\\package.xml"
+  val output = "C:\\Users\\Corkine\\Desktop\\lhlExperiment_output"
+  println(s"cmd /c C: && cd $launchPath && .\\launch4j.jar $pkg_config")
+  val ans = s"cmd /c C: && cd $launchPath && .\\launch4j.jar $pkg_config && explorer $output".!!
+  println(ans)
+}
