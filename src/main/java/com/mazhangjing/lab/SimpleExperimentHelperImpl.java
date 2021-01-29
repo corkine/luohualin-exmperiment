@@ -77,7 +77,7 @@ public class SimpleExperimentHelperImpl implements ExperimentHelper {
     private boolean isInited = false;
 
     private static final String COPYRIGHT =
-            "The copyright of this software belongs to the Virtual Behavior Laboratory of the School of Psychology, Central China com.mazhangjing.lhl.Normal University. " +
+            "The copyright of this software belongs to the Virtual Behavior Laboratory of the School of Psychology, Central China Normal University. " +
             "Any unauthorized copy of the program or copy of the code will be legally held liable.\n" +
             "The software is based on the Java platform design and Java TM is a registered trademark of Oracle Corporation.\n" +
             "The software is based on the Java FX framework and Java FX is based on the GNU v2 distribution protocol.\n" +
