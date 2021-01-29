@@ -14,7 +14,7 @@ import scalafx.scene.input.KeyCode
 import scalafx.scene.layout.StackPane
 import scalafx.scene.text.{Font, Text, TextAlignment}
 
-import java.io.FileWriter
+import java.io.{FileOutputStream, FileWriter, OutputStreamWriter}
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import scala.collection.mutable.ArrayBuffer
@@ -154,10 +154,11 @@ class LHLExperiment2 extends Experiment with Logging {
       val value = Json.toJson(Exp2Data.data)
       val userName = ExpConfig.USER_ID
       val userGender = if (ExpConfig.USER_MALE) "male" else "female"
-      val writer = new FileWriter(s"EXP2_${userName}_${userGender}_" +
+      val fileName = s"EXP2_${userName}_${userGender}_" +
         s"${LocalDateTime.now()
           .format(DateTimeFormatter.ISO_DATE_TIME)
-          .replace(":","_")}.json")
+          .replace(":","_")}.json"
+      val writer = new OutputStreamWriter(new FileOutputStream(fileName),"UTF-8")
       writer.write(Json.prettyPrint(value))
       writer.flush()
       writer.close()
