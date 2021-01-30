@@ -21,17 +21,17 @@
                         <level>DEBUG</level>
                     </filter>
 　　　　　　　　　　</appender>-->
-    <!--<appender name="FILE" class="ch.qos.logback.core.FileAppender">
-        <file>log_%d{yyyy-MM-dd}.log</file>
+    <appender name="FILE" class="ch.qos.logback.core.FileAppender">
+        <file>psy4j.log</file>
         <encoder>
             <pattern>%d{HH:mm:ss:SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
         </encoder>
         <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
             <level>DEBUG</level>
         </filter>
-    </appender>-->
+    </appender>
     <root level="debug">
         <appender-ref ref="STDOUT" />
-        <!--<appender-ref ref="FILE" />-->
+        <appender-ref ref="FILE" />
     </root>
 </configuration>

@@ -12,3 +12,4 @@ genPictures
 output
 *.class
 *.history
+psy4j.log

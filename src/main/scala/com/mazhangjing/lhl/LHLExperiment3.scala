@@ -52,7 +52,7 @@ object Exp3Config {
 }
 
 object Exp3Data {
-  case class Data(isPre:Boolean,
+  case class Data(userID:String, isPre:Boolean,
                   target:String, targetColor:String,
                   userAnswer:String,realAnswer:String,
                   answerRight:Boolean,
@@ -223,7 +223,7 @@ trait StoopScreen extends ScreenAdaptor {
       val userChoose = getCode.toUpperCase
       if (getCode.isEmpty) logger.warn("User don't have answer!!!")
       val answerRight = if (userChoose == rightKey) true else false
-      val data = Exp3Data.Data(isLearn, target, targetColor.toString, userChoose, rightKey, answerRight, timeCost, blockInfo)
+      val data = Exp3Data.Data(ExpConfig.USER_ID, isLearn, target, targetColor.toString, userChoose, rightKey, answerRight, timeCost, blockInfo)
       logger.info(s"UserChoose $userChoose, rightAnswer $rightKey, AnswersRight $answerRight")
       Exp3Data.addData(data)
     }

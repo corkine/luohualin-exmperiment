@@ -46,7 +46,7 @@ object Exp2Config {
 }
 
 object Exp2Data {
-  case class Data(isPre:Boolean,
+  case class Data(userID:String, isPre:Boolean,
                   userAnswer:String,realAnswer:String,
                   answerRight:Boolean,
                   timeCost:Long,
@@ -245,7 +245,7 @@ trait TargetShowAndCheckScreen extends ScreenAdaptor {
       else if (userChoose.toUpperCase().contains("J") && !isS) true
       else false
       val rightAnswer = if (isS) "S" else "J"
-      val data = Exp2Data.Data(isLearn, userChoose, rightAnswer, answerRight, timeCost, blockInfo)
+      val data = Exp2Data.Data(ExpConfig.USER_ID, isLearn, userChoose, rightAnswer, answerRight, timeCost, blockInfo)
       logger.info(s"UserChoose $userChoose, rightAnswer $rightAnswer, AnswersRight $answerRight")
       Exp2Data.addData(data)
     }

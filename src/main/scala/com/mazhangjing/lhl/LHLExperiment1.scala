@@ -53,7 +53,7 @@ object Exp1Config {
 }
 
 object Exp1Data {
-  case class Data(isPre:Boolean,
+  case class Data(userID:String, isPre:Boolean,
                   userAnswer:String,realAnswer:String,realShortAnswer:String,
                   answerRight:Boolean,
                   costMills:Long,
@@ -353,7 +353,7 @@ trait AnswerCollect extends ScreenAdaptor {
       val answerRight = realAnswer.endsWith(answer()) && answer().length == 4
       val realShortAnswer = realAnswer.substring(realAnswer.length - 4)
       logger.info(s"UserAnswer ${answer()}, realAnswer $realAnswer, isRight?$answerRight")
-      Exp1Data.addData(Exp1Data.Data(isPre, answer(), realAnswer, realShortAnswer, answerRight, costTime))
+      Exp1Data.addData(Exp1Data.Data(ExpConfig.USER_ID, isPre, answer(), realAnswer, realShortAnswer, answerRight, costTime))
     }
   }
 }
