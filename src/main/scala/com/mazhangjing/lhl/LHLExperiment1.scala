@@ -25,7 +25,8 @@ import scala.collection.mutable.ArrayBuffer
 object ExpConfig {
   println("DIR IS " + System.getProperty("user.dir"))
   var CONF: Config =
-    if (System.getProperty("os.name").toUpperCase.contains("MAC")) ConfigFactory.load().resolve()
+    if (System.getProperty("os.name").toUpperCase.contains("MAC"))
+      ConfigFactory.parseFile(new File(System.getProperty("user.dir") + "/config.conf")).resolve()
     else ConfigFactory.parseFile(new File("config.conf")).resolve()
   //var CONF: Config = ConfigFactory.load().resolve()
   var IS_DEBUG: Boolean = CONF.getBoolean("main.isDebug")
