@@ -10,5 +10,6 @@ project/project/target
 logDist
 genPictures
 output
+out
 *.class
 *.history

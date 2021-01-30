@@ -72,8 +72,8 @@ wixProductId := "48c5089b-c8d9-4f7c-ad72-e7ad7963cce2"
 wixProductUpgradeId := "673cc705-76a9-47ac-94a7-ce5c1c8f8873"*/
 
 //For Mac Package, Use
-/*
-enablePlugins(JDKPackagerPlugin)
+
+/*enablePlugins(JDKPackagerPlugin)
 lazy val iconGlob = sys.props("os.name").toLowerCase match {
   case os if os.contains("mac") => "*.icns"
   case os if os.contains("win") => "*.ico"
@@ -86,9 +86,11 @@ packageDescription := "LHLExperiment Powered by Psy4J"
 jdkPackagerProperties := Map("app.name" -> name.value, "app.version" -> version.value)
 jdkPackagerAppArgs := Seq(maintainer.value, packageSummary.value, packageDescription.value)
 jdkPackagerType := "image"
-(antPackagerTasks in JDKPackager) := (antPackagerTasks in JDKPackager).value orElse {
+/*(antPackagerTasks in JDKPackager) := (antPackagerTasks in JDKPackager).value orElse {
   for {
     f <- Some(file("/Library/Java/JavaVirtualMachines/jdk1.8.0_261.jdk/Contents/Home/lib/ant-javafx.jar")) if f.exists()
   } yield f
 }*/
+
+enablePlugins(UniversalPlugin)*/
 
